@@ -4,6 +4,12 @@
 
 int main()
 {
+	//MainMenu()
+	//...
+	//MainLoop()
+	//{
+	//...
+	//}
     return 0;
 }
 
