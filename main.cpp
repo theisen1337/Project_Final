@@ -10,7 +10,6 @@ int main()
 	//{
 	//...
 	//}
-	//I'm the captain now
     return 0;
 }
 
