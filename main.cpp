@@ -8,7 +8,7 @@ int main()
 	//...
 	//MainLoop()
 	//{
-	//...
+	// Insert Code Here
 	//}
     return 0;
 }
