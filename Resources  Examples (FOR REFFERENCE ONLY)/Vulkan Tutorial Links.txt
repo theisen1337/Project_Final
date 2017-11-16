@@ -1,0 +1,2 @@
+https://vulkan-tutorial.com/
+https://www.khronos.org/blog/beginners-guide-to-vulkan
