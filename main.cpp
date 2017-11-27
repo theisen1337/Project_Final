@@ -14,8 +14,10 @@ int main()
 	//...Hey matey mate
 	//blah
 	//}
-	int jumanji = 42;
 
     return 0;
 }
 
+void render() {
+	//Render Placeholder and GitHub Test - Taylor Thomas
+}
