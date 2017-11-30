@@ -11,15 +11,15 @@ int main()
 	*/
 	//MainLoop()
 	//{
-<<<<<<< HEAD
+
 	//...
 	//}
-=======
+
 	//...Hey matey mate
 	//blah
 	//}
 
->>>>>>> Project_final(Taylor)
+
     return 0;
 }
 
