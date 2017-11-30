@@ -11,8 +11,18 @@ int main()
 	*/
 	//MainLoop()
 	//{
+<<<<<<< HEAD
 	//...
 	//}
+=======
+	//...Hey matey mate
+	//blah
+	//}
+
+>>>>>>> Project_final(Taylor)
     return 0;
 }
 
+void render() {
+	//Render Placeholder and GitHub Test - Taylor Thomas
+}
