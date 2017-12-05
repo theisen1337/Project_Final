@@ -1,2 +1,5 @@
 https://vulkan-tutorial.com/
 https://www.khronos.org/blog/beginners-guide-to-vulkan
+https://software.intel.com/en-us/articles/api-without-secrets-introduction-to-vulkan-part-1
+https://github.com/GameTechDev/IntroductionToVulkan
+https://www.khronos.org/assets/uploads/developers/library/2016-vulkan-devu-seoul/1-Vulkan-Tutorial_English.pdf
