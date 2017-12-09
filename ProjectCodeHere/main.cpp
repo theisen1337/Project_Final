@@ -1,17 +1,17 @@
-// main.cpp : Defines the entry point for the console application.
-//
+#include "VulkanView.h";
 
+int main() {
+	VulkanView app;
 
-int main()
-{
-	//MainMenu()
-	//...
-	/*
-		Push more.
-	*/
-	//MainLoop()
-	//{
+	try {
+		app.Run();
+	}
+	catch (const std::runtime_error& e) {
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
 
+<<<<<<< HEAD:ProjectCodeHere/main.cpp
 	//...
 	//}
 
@@ -25,4 +25,7 @@ int main()
 
 void render() {
 	//Render Placeholder and GitHub Test - Taylor Thomas
+=======
+	return EXIT_SUCCESS;
+>>>>>>> Project_final(David-King):main.cpp
 }
