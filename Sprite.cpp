@@ -4,6 +4,7 @@
 Sprite::Sprite(const char* imagePath)
 {
 	pixels = stbi_load(path, &width, &height, &channels, STBI_rgb_alpha);
+	imageSize = width * height * 4;
 
 	if (!pixels) {
 		throw std::runtime_error("failed to load texture image!");
@@ -38,12 +39,18 @@ stbi_uc* Sprite::getPixels()
 	return pixels;
 }
 
+VkDeviceSize Sprite::getImageSize()
+{
+	return imageSize;
+}
+
 //changes the image the sprite has
 void Sprite::changeSprite(const char* imagePath)
 {
 	if (path == imagePath) return;
 
 	pixels = stbi_load(path, &width, &height, &channels, STBI_rgb_alpha);
+	imageSize = width * height * 4;
 
 	if (!pixels) {
 		throw std::runtime_error("failed to load texture image!");

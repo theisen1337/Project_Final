@@ -6,19 +6,21 @@
 
 class Sprite
 {
-	private:
-		const char* path; 
-		int width;			//width of sprite in pixels
-		int height;			//height of sprite in pixels
-		int channels;		//number of color channels the sprite has
-		stbi_uc* pixels;	//array of pixels in the sprite
+private:
+	const char* path;
+	int width;				//width of sprite in pixels
+	int height;				//height of sprite in pixels
+	int channels;			//number of color channels the sprite has
+	stbi_uc* pixels;		//array of pixels in the sprite
+	VkDeviceSize imageSize; //memory size of the image
 
-	public:
-		Sprite(const char* imagePath);
-		~Sprite();
-		int getWidth();
-		int getHeight();
-		int getChannels();
-		stbi_uc* getPixels();
-		void changeSprite(const char* imagePath);
+public:
+	Sprite(const char* imagePath);
+	~Sprite();
+	int getWidth();
+	int getHeight();
+	int getChannels();
+	stbi_uc* getPixels();
+	VkDeviceSize getImageSize();
+	void changeSprite(const char* imagePath);
 };
