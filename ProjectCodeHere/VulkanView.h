@@ -3,11 +3,13 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <algorithm>
 #include <vector>
 #include <cstring>
 #include <set>
-#include <string>
 
+
+//	Sets up GLFW Window, GPU, Swap Chain, Validation Layers, and Image Views for rendering
 class VulkanView
 {
 	const std::vector<const char*> validationLayers = {
@@ -60,38 +62,67 @@ class VulkanView
 		VulkanView();
 		VulkanView(const char* title, int, int);
 		~VulkanView();
-		void Run();
+		void Run(); // Creates and displays the window
 
 	private:
-		GLFWwindow* window;
+		/*/
+		 *	Variables
+		/*/
+
+		GLFWwindow* window;	// Stores reference to window
 
 		VkInstance instance;
 		VkDebugReportCallbackEXT callback;
 		VkSurfaceKHR surface;
 
-		VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+		VkPhysicalDevice physicalDevice = VK_NULL_HANDLE; // Stores reference to GPU
 		VkDevice device;
 
 		VkQueue graphicsQueue;
 		VkQueue presentQueue;
 
-		const char* title;
-		int width;
-		int height;
+		VkSwapchainKHR swapChain;
+		std::vector<VkImage> swapChainImages;
+		VkFormat swapChainImageFormat;
+		VkExtent2D swapChainExtent;
+		std::vector<VkImageView> swapChainImageViews;
 
+		const char* title;	// Title of the window
+		int width;			// Width of the window	
+		int height;			// Height of the window
+
+		/*/
+		 *	Functions
+		/*/
+
+		//	Initialization	//
 		void initWindow(const char* title, int, int);
-		void initVulkan();
-		void mainLoop();
-		void cleanUp();
-		void createInstance();
-		void setupDebugCallback();
-		void createSurface();
-		void pickPhysicalDevice();
-		void createLogicalDevice();
-		SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
+		void initVulkan();			// Initializes Vulkan features necessary for window
+		void mainLoop();			// Handles events of glfw window
+		void cleanUp();				// Deletes instances and deallocates memory
+		void createInstance();		// Instantiates application
+		void createSurface();		// Creates window surface that Vulkan can interact with
+
+		//	GPU Interface	//
+		void pickPhysicalDevice();	// Selects GPU that the engine will use
+		void createLogicalDevice();	// Creates logical device to interface with physical device
 		bool isDeviceSuitable(VkPhysicalDevice device);
 		bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 		QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+
+		//	Swap Chain	//
+		void createSwapChain();		// Creates swap chain for loading images
+		VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+		VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
+		VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+		SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
+
+		//	Image View	//
+		void createImageViews();	// Creates views for swap chain images
+		VkImageView createImageView(VkImage image, VkFormat format);
+
+		//	Validation Layer	//
+		void setupDebugCallback();	// Readies validation layers
 		std::vector<const char*> getRequiredExtensions();
 		bool checkValidationLayerSupport();
 		static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugReportFlagsEXT, VkDebugReportObjectTypeEXT, uint64_t, size_t, int32_t, const char*, const char*, void*);
