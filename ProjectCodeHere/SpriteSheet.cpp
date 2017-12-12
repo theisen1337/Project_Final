@@ -44,6 +44,15 @@ void SpriteSheet::setFirstFrame(int firstFrame) {
 	this->firstFrame = firstFrame;
 }
 
+stbi_uc* SpriteSheet::getFrame(int frameNum) {
+	if (frameNum >= 0 && frameNum < numFrames) {
+		return frames[frameNum];
+	}
+	else {
+		return nullptr;
+	}
+}
+
 int SpriteSheet::getFrameWidth() {
 	return frameWidth;
 }

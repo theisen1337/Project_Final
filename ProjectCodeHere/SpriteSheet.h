@@ -9,12 +9,13 @@ class SpriteSheet : public Sprite
 {
 private:
 	stbi_uc* pixels; // array of bytes representing the rgba values of pixels in the image
+	stbi_uc** frames = new stbi_uc*[numFrames]; // dynamic array of an array of pixels for each frames
+
 	unsigned int frameWidth;
 	unsigned int frameHeight;
 	unsigned int numFrames;
 	unsigned int firstFrame;
 
-	stbi_uc** frames = new stbi_uc*[numFrames]; // dynamic array of an array of pixels for each frames
 
 public:
 	SpriteSheet(const char* imagePath, int widthPx, int heightPx, int frameWidthPx, int frameHeightPx, int numFrames);
@@ -25,6 +26,8 @@ public:
 
 	void setFirstFrame(int firstFrame);
 
+	// returns the stbi_uc pointer to the frame in the frames array at the passed position. Returns nullptr if position is invalid
+	stbi_uc* getFrame(int frameNum);
 	int getFrameWidth();
 	int getFrameHeight();
 	int getNumFrames();
