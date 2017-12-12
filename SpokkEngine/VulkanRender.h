@@ -24,8 +24,21 @@ class VulkanRender
 
 public:
 
-	// INITIALIZATION
+	// INITIALIZATION //
 	void createGraphicsPipeline();
 
+	// GETTERS //
+	VkPipelineLayout getPipelineLayout();
+
+	// READ DATA //
+	static std::vector<char> readFile(const std::string& filename);
+
+	// SHADERS //
+	VkShaderModule createShaderModule(const std::vector<char>& code);
+
+	// MODELS AND FORMATS //
+	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
+	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 };
 #endif

@@ -2,8 +2,29 @@
 #include "VulkanView.h"
 #include "VulkanRender.h"
 
-VulkanView view;
-VulkanRender render;
+// DECLARES OUR CLASS OBJECTS
+static VulkanView view;
+static VulkanRender render;
+
+// RETRIEVES CLASS OBJECTS
+// First One Makes SpokkEngine a Singleton
+SpokkEngine& SpokkEngine::getInstance()
+{
+	static SpokkEngine instance;
+
+	return instance;
+}
+VulkanView *SpokkEngine::getView()
+{
+	return &view;
+}
+VulkanRender *SpokkEngine::getRender()
+{
+	return &render;
+}
+
+// DECLARES OUR MAIN OBJECT
+SpokkEngine app = SpokkEngine::getInstance();
 
 // ############ //
 // Runs Program //
@@ -49,6 +70,8 @@ void SpokkEngine::mainLoop()
 
 void SpokkEngine::cleanup()
 {
+	vkDestroyPipelineLayout(view.getDevice(), render.getPipelineLayout(), nullptr);
+
 	for (auto imageView : view.getSwapChainImageViews())
 	{
 		vkDestroyImageView(view.getDevice(), imageView, nullptr);
@@ -69,13 +92,12 @@ void SpokkEngine::cleanup()
 	glfwTerminate();
 }
 
+
 int main()
 {
-	SpokkEngine application;
-
 	try
 	{
-		application.run();
+		app.run();
 	}
 	catch (const std::runtime_error& e)
 	{

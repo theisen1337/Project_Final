@@ -1,4 +1,5 @@
-#include "VulkanView.h";
+#include "VulkanView.h"
+#include "SpokkEngine.h"
 
 // STATIC VARIABLES
 static GLFWwindow* window;
@@ -11,6 +12,9 @@ static std::vector<VkImageView> swapChainImageViews;
 
 static int const WIDTH = 800;
 static int const HEIGHT = 600;
+
+// RETRIEVES OUR RENDER OBJECT
+VulkanRender render = *(SpokkEngine::getRender());
 
 // CONSTRUCTORS
 VulkanView::VulkanView() {}
@@ -120,7 +124,7 @@ void VulkanView::DestroyDebugReportCallbackEXT(VkInstance instance, VkDebugRepor
 		func(instance, callback, pAllocator);
 	}
 }
-static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objType, uint64_t obj, size_t location, int32_t code, const char* layerPrefix, const char* msg, void* userData)
+VKAPI_ATTR VkBool32 VKAPI_CALL VulkanView::debugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objType, uint64_t obj, size_t location, int32_t code, const char* layerPrefix, const char* msg, void* userData)
 {
 	std::cerr << "validation layer: " << msg << std::endl;
 
@@ -423,15 +427,18 @@ void VulkanView::createLogicalDevice()
 	createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
 	createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
-	if (enableValidationLayers) {
+	if (enableValidationLayers) 
+	{
 		createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
 		createInfo.ppEnabledLayerNames = validationLayers.data();
 	}
-	else {
+	else 
+	{
 		createInfo.enabledLayerCount = 0;
 	}
 
-	if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS) {
+	if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS) 
+	{
 		throw std::runtime_error("failed to create logical device!");
 	}
 
@@ -526,7 +533,8 @@ void VulkanView::createImageViews()
 		createInfo.subresourceRange.baseArrayLayer = 0;
 		createInfo.subresourceRange.layerCount = 1;
 
-		if (vkCreateImageView(device, &createInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
+		if (vkCreateImageView(device, &createInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) 
+		{
 			throw std::runtime_error("failed to create image views!");
 		}
 	}

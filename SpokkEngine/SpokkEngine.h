@@ -19,10 +19,12 @@
 // Can also use Projection Transformations such as glm::perspective
 #include <glm/gtc/matrix_transform.hpp>
 
+/*
 // Lets us use the STB Image Library to Upload Images
 #define STB_IMAGE_IMPLEMENTATION
 // Inclues our STB_Image header
 #include <stb_image.h>
+*/
 
 // Included for Reporting and Propagating Errors (1/2)
 #include <iostream>
@@ -45,13 +47,23 @@
 // Exposes Functions to do Precise Timekeeping
 #include <chrono>
 
+#include "VulkanView.h"
+#include "VulkanRender.h"
+
 class SpokkEngine
 {
+
 public:
 
 	void run();
 	void initVulkan();
 	void mainLoop();
 	void cleanup();
+
+	static SpokkEngine& getInstance();
+
+	// GETTERS //
+	static VulkanView* getView();
+	static VulkanRender* getRender();
 };
 #endif
