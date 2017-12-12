@@ -1,7 +1,9 @@
 #include "SpokkEngine.h"
 #include "VulkanView.h"
+#include "VulkanRender.h"
 
 VulkanView view;
+VulkanRender render;
 
 // ############ //
 // Runs Program //
@@ -31,6 +33,9 @@ void SpokkEngine::initVulkan()
 	view.createSurface();
 	view.pickPhysicalDevice();
 	view.createLogicalDevice();
+	view.createSwapChain();
+	view.createImageViews();
+	render.createGraphicsPipeline();
 }
 
 void SpokkEngine::mainLoop()
@@ -44,6 +49,13 @@ void SpokkEngine::mainLoop()
 
 void SpokkEngine::cleanup()
 {
+	for (auto imageView : view.getSwapChainImageViews())
+	{
+		vkDestroyImageView(view.getDevice(), imageView, nullptr);
+	}
+
+	vkDestroySwapchainKHR(view.getDevice(), view.getSwapChain(), nullptr);
+
 	vkDestroyDevice(view.getDevice(), nullptr);
 
 	view.DestroyDebugReportCallbackEXT(view.getInstance(), view.getCallback(), nullptr);

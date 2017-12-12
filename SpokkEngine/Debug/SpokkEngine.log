@@ -1,8 +1,7 @@
-﻿  SpokkEngine.cpp
-  Generating Code...
-  Compiling...
-  VulkanView.cpp
+﻿  VulkanView.cpp
 d:\student data\desktop\finalproj_class\spokkengine\vulkanview.cpp(1): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  VulkanRender.cpp
+  SpokkEngine.cpp
   Generating Code...
   SpokkEngine.vcxproj -> D:\Student Data\Desktop\FinalProj_Class\SpokkEngine\Debug\SpokkEngine.exe
   SpokkEngine.vcxproj -> D:\Student Data\Desktop\FinalProj_Class\SpokkEngine\Debug\SpokkEngine.pdb (Partial PDB)
