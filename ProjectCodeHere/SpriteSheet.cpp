@@ -22,8 +22,6 @@ bool SpriteSheet::validateSpritesheet() {
 	}
 }
 
-
-// Fills the frame array with the pixels for the frames in a vertical spriteSheet
 void SpriteSheet::fetchFrames() {
 
 	// Loop over all elements of pixels  which is (width * height * 4) elements
@@ -41,7 +39,12 @@ void SpriteSheet::fetchFrames() {
 }
 
 void SpriteSheet::setFirstFrame(int firstFrame) {
-	this->firstFrame = firstFrame;
+	if (firstFrame >= 0 && firstFrame < numFrames) {
+		this->firstFrame = firstFrame;
+	}
+	else {
+		this->firstFrame = 0;
+	}
 }
 
 stbi_uc* SpriteSheet::getFrame(int frameNum) {

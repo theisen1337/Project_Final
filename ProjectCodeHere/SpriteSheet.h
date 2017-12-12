@@ -21,9 +21,12 @@ public:
 	SpriteSheet(const char* imagePath, int widthPx, int heightPx, int frameWidthPx, int frameHeightPx, int numFrames);
 	~SpriteSheet();
 
+	// Returns true if the spritesheet has a valid frameWidth and frameHeight and numFrames
 	bool validateSpritesheet();
+	// Fills the frames array with the stbi_uc pointers representing the pixels.
 	void fetchFrames();
 
+	// Confirms the the new firstFrame exists and assigns it to be the firstFrame. Sets firstFrame to 0 if invalid parameter passed.
 	void setFirstFrame(int firstFrame);
 
 	// returns the stbi_uc pointer to the frame in the frames array at the passed position. Returns nullptr if position is invalid
