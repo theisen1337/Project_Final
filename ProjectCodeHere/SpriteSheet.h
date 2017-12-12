@@ -18,7 +18,7 @@ private:
 
 
 public:
-	SpriteSheet(const char* imagePath, int widthPx, int heightPx, int frameWidthPx, int frameHeightPx, int numFrames);
+	SpriteSheet(const char* imagePath, int numFrames);
 	~SpriteSheet();
 
 	// Returns true if the spritesheet has a valid frameWidth and frameHeight and numFrames
