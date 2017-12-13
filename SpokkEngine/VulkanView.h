@@ -5,21 +5,14 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 #include <algorithm>
 #include <vector>
 #include <cstring>
 #include <set>
 
-const std::vector<const char*> validationLayers = 
-{
-	"VK_LAYER_LUNARG_standard_validation"
-};
-
-const std::vector<const char*> deviceExtensions = 
-{
-	VK_KHR_SWAPCHAIN_EXTENSION_NAME
-};
+using namespace std;
 
 #ifdef NDEBUG
 const bool enableValidationLayers = false;
@@ -32,20 +25,16 @@ class VulkanView
 
 public:
 	// CLASS MEMBERS //
-	VkInstance instance;
-	VkDebugReportCallbackEXT callback;
-
-	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-
-	VkQueue graphicsQueue;
-	VkQueue presentQueue;
-
 	std::vector<VkImage> swapChainImages;
-	VkFormat swapChainImageFormat;
-	VkExtent2D swapChainExtent;
 
-	const std::vector<const char*> validationLayers = {
+	const std::vector<const char*> validationLayers =
+	{
 		"VK_LAYER_LUNARG_standard_validation"
+	};
+
+	const std::vector<const char*> deviceExtensions =
+	{
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME
 	};
 
 	// CONSTRUCTOR //
@@ -60,7 +49,15 @@ public:
 	VkSurfaceKHR getSurface();
 	VkSwapchainKHR getSwapChain();
 	std::vector<VkImageView> getSwapChainImageViews();
-
+	static VkImageView getSwapChainImageViewsIndex(int index);
+	VkExtent2D getSwapChainExtent();
+	VkFormat getSwapChainImageFormat();
+	std::vector<VkFramebuffer> getSwapChainFramebuffers();
+	static VkFramebuffer getSwapChainFramebuffersIndex(int index);
+	VkQueue getGraphicsQueue();
+	VkQueue getPresentQueue();
+	VkPhysicalDevice getPhysicalDevice();
+	
 	// DEBUGGING //
 	VkResult CreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback);
 	void DestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator);

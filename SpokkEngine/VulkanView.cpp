@@ -8,7 +8,13 @@ static VkDebugReportCallbackEXT callback;
 static VkDevice device;
 static VkSurfaceKHR surface;
 static VkSwapchainKHR swapChain;
+static VkExtent2D swapChainExtent;
+static VkFormat swapChainImageFormat;
 static std::vector<VkImageView> swapChainImageViews;
+static std::vector<VkFramebuffer> swapChainFramebuffers;
+static VkQueue graphicsQueue;
+static VkQueue presentQueue;
+static VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
 static int const WIDTH = 800;
 static int const HEIGHT = 600;
@@ -49,6 +55,38 @@ std::vector<VkImageView> VulkanView::getSwapChainImageViews()
 {
 	return swapChainImageViews;
 }
+VkImageView VulkanView::getSwapChainImageViewsIndex(int index)
+{
+	return swapChainImageViews[index];
+}
+VkExtent2D VulkanView::getSwapChainExtent()
+{
+	return swapChainExtent;
+}
+VkFormat VulkanView::getSwapChainImageFormat()
+{
+	return swapChainImageFormat;
+}
+std::vector<VkFramebuffer> VulkanView::getSwapChainFramebuffers()
+{
+	return swapChainFramebuffers;
+}
+VkFramebuffer VulkanView::getSwapChainFramebuffersIndex(int index)
+{
+	return swapChainFramebuffers[index];
+}
+VkQueue VulkanView::getGraphicsQueue()
+{
+	return graphicsQueue;
+}
+VkQueue VulkanView::getPresentQueue()
+{
+	return presentQueue;
+}
+VkPhysicalDevice VulkanView::getPhysicalDevice()
+{
+	return physicalDevice;
+}
 
 // STRUCTS
 struct QueueFamilyIndices
@@ -69,7 +107,7 @@ struct SwapChainSupportDetails
 };
 
 // QUEUES
-QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) 
+static QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) 
 {
 	QueueFamilyIndices indices;
 
@@ -405,7 +443,8 @@ void VulkanView::createLogicalDevice()
 	std::set<int> uniqueQueueFamilies = { indices.graphicsFamily, indices.presentFamily };
 
 	float queuePriority = 1.0f;
-	for (int queueFamily : uniqueQueueFamilies) {
+	for (int queueFamily : uniqueQueueFamilies) 
+	{
 		VkDeviceQueueCreateInfo queueCreateInfo = {};
 		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 		queueCreateInfo.queueFamilyIndex = queueFamily;
@@ -517,7 +556,8 @@ void VulkanView::createImageViews()
 {
 	swapChainImageViews.resize(swapChainImages.size());
 
-	for (size_t i = 0; i < swapChainImages.size(); i++) {
+	for (size_t i = 0; i < swapChainImages.size(); i++) 
+	{
 		VkImageViewCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 		createInfo.image = swapChainImages[i];

@@ -35,13 +35,13 @@ void SpokkEngine::run()
 	view.initWindow();
 
 	// Initiates All the Functions
-	SpokkEngine::initVulkan();
+	initVulkan();
 
 	// Loop for Rendering
-	SpokkEngine::mainLoop();
+	mainLoop();
 
 	// Deletes and Deallocates Memory
-	SpokkEngine::cleanup();
+	cleanup();
 }
 
 // ################## //
@@ -56,21 +56,38 @@ void SpokkEngine::initVulkan()
 	view.createLogicalDevice();
 	view.createSwapChain();
 	view.createImageViews();
+	render.createRenderPass();
 	render.createGraphicsPipeline();
+	render.createFramebuffers();
+	render.createCommandPool();
+	render.createCommandBuffers();
+	render.createSemaphores();
 }
 
 void SpokkEngine::mainLoop()
 {
 	while (!glfwWindowShouldClose(view.getWindow()))
 	{
-		// Checks for Events Such as Clicking the 'X' on the Window
 		glfwPollEvents();
+		render.drawFrame();
 	}
 }
 
 void SpokkEngine::cleanup()
 {
+	vkDestroySemaphore(view.getDevice(), render.getRenderFinishedSemaphore(), nullptr);
+	vkDestroySemaphore(view.getDevice(), render.getImageAvailableSemaphore(), nullptr);
+
+	vkDestroyCommandPool(view.getDevice(), render.getCommandPool(), nullptr);
+
+	for (auto framebuffer : view.getSwapChainFramebuffers()) 
+	{
+		vkDestroyFramebuffer(view.getDevice(), framebuffer, nullptr);
+	}
+
+	vkDestroyPipeline(view.getDevice(), render.getGraphicsPipeline(), nullptr);
 	vkDestroyPipelineLayout(view.getDevice(), render.getPipelineLayout(), nullptr);
+	vkDestroyRenderPass(view.getDevice(), render.getRenderPass(), nullptr);
 
 	for (auto imageView : view.getSwapChainImageViews())
 	{
@@ -85,13 +102,12 @@ void SpokkEngine::cleanup()
 
 	vkDestroySurfaceKHR(view.getInstance(), view.getSurface(), nullptr);
 
-	vkDestroyInstance(view.instance, nullptr);
+	vkDestroyInstance(view.getInstance(), nullptr);
 
 	glfwDestroyWindow(view.getWindow());
 
 	glfwTerminate();
 }
-
 
 int main()
 {
