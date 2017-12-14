@@ -1,3 +1,11 @@
-﻿  VulkanRender.cpp
-  SpokkEngine.vcxproj -> D:\Student Data\Desktop\FinalProj_Class\SpokkEngine\Debug\SpokkEngine.exe
-  SpokkEngine.vcxproj -> D:\Student Data\Desktop\FinalProj_Class\SpokkEngine\Debug\SpokkEngine.pdb (Partial PDB)
+﻿  VulkanView.cpp
+  VulkanRender.cpp
+d:\student data\desktop\finalproj_class\spokkengine\vulkanrender.cpp(277): error C2065: 'QueueFamilyIndices': undeclared identifier
+d:\student data\desktop\finalproj_class\spokkengine\vulkanrender.cpp(277): error C2146: syntax error: missing ';' before identifier 'queueFamilyIndices'
+d:\student data\desktop\finalproj_class\spokkengine\vulkanrender.cpp(277): error C2065: 'queueFamilyIndices': undeclared identifier
+d:\student data\desktop\finalproj_class\spokkengine\vulkanrender.cpp(277): error C3861: 'findQueueFamilies': identifier not found
+d:\student data\desktop\finalproj_class\spokkengine\vulkanrender.cpp(281): error C2065: 'queueFamilyIndices': undeclared identifier
+d:\student data\desktop\finalproj_class\spokkengine\vulkanrender.cpp(281): error C2228: left of '.graphicsFamily' must have class/struct/union
+  d:\student data\desktop\finalproj_class\spokkengine\vulkanrender.cpp(281): note: type is 'unknown-type'
+  SpokkEngine.cpp
+  Generating Code...

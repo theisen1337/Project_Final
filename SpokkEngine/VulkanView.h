@@ -87,5 +87,7 @@ public:
 	// CHECK DEVICE //
 	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 	bool isDeviceSuitable(VkPhysicalDevice device);
+
+	QueueFamilyIndices VulkanView::findQueueFamilies(VkPhysicalDevice device);
 };
 #endif

@@ -107,7 +107,7 @@ struct SwapChainSupportDetails
 };
 
 // QUEUES
-static QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) 
+static QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device)
 {
 	QueueFamilyIndices indices;
 
