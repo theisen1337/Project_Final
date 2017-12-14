@@ -15,7 +15,7 @@ SpriteSheet::~SpriteSheet()
 }
 
 bool SpriteSheet::validateSpritesheet() {
-	if ((getWidth() * getHeight()) == (numFrames * (frameWidth * frameHeight)) && frameWidth == getWidth(0) {
+	if ((getWidth() * getHeight()) == (numFrames * (frameWidth * frameHeight)) && frameWidth == getWidth()) {
 		return true;
 	}
 	else {
