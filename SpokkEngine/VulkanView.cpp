@@ -88,17 +88,8 @@ VkPhysicalDevice VulkanView::getPhysicalDevice()
 	return physicalDevice;
 }
 
-// STRUCTS
-struct QueueFamilyIndices
-{
-	int graphicsFamily = -1;
-	int presentFamily = -1;
 
-	bool isComplete()
-	{
-		return graphicsFamily >= 0 && presentFamily >= 0;
-	}
-};
+
 struct SwapChainSupportDetails
 {
 	VkSurfaceCapabilitiesKHR capabilities;
@@ -106,10 +97,16 @@ struct SwapChainSupportDetails
 	std::vector<VkPresentModeKHR> presentModes;
 };
 
-// QUEUES
-static QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device)
+VulkanView::QueueFamilyIndices VulkanView::getTayTayQueueFamilyIndices()
 {
-	QueueFamilyIndices indices;
+	VulkanView::QueueFamilyIndices indices = FUCK_findQueueFamilies(physicalDevice);
+	return indices;
+}
+
+// QUEUES
+VulkanView::QueueFamilyIndices VulkanView::FUCK_findQueueFamilies(VkPhysicalDevice device)
+{
+	VulkanView::QueueFamilyIndices indices;
 
 	uint32_t queueFamilyCount = 0;
 	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
@@ -335,7 +332,7 @@ bool VulkanView::checkDeviceExtensionSupport(VkPhysicalDevice device)
 // CHECK DEVICE
 bool VulkanView::isDeviceSuitable(VkPhysicalDevice device) 
 {
-	QueueFamilyIndices indices = findQueueFamilies(device);
+	QueueFamilyIndices indices = FUCK_findQueueFamilies(device);
 
 	bool extensionsSupported = checkDeviceExtensionSupport(device);
 
@@ -347,6 +344,10 @@ bool VulkanView::isDeviceSuitable(VkPhysicalDevice device)
 
 	return indices.isComplete() && extensionsSupported && swapChainAdequate;
 }
+
+
+
+
 
 // INITIALIZE WINDOW
 void VulkanView::initWindow()
@@ -437,7 +438,7 @@ void VulkanView::pickPhysicalDevice()
 // CREATE LOGICAL DEVICE
 void VulkanView::createLogicalDevice()
 {
-	QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+	QueueFamilyIndices indices = FUCK_findQueueFamilies(physicalDevice);
 
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 	std::set<int> uniqueQueueFamilies = { indices.graphicsFamily, indices.presentFamily };
@@ -519,7 +520,7 @@ void VulkanView::createSwapChain()
 	createInfo.imageArrayLayers = 1;
 	createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-	QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+	QueueFamilyIndices indices = FUCK_findQueueFamilies(physicalDevice);
 	uint32_t queueFamilyIndices[] = { (uint32_t)indices.graphicsFamily, (uint32_t)indices.presentFamily };
 
 	if (indices.graphicsFamily != indices.presentFamily) {

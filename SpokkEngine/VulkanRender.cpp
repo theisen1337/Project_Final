@@ -274,11 +274,11 @@ void VulkanRender::createFramebuffers()
 // CREATE COMMAND POOL
 void VulkanRender::createCommandPool()
 {
-	QueueFamilyIndices queueFamilyIndices = findQueueFamilies(view.getPhysicalDevice());
-
+	VulkanView::QueueFamilyIndices TayTayQueueFamilies = view.getTayTayQueueFamilyIndices(); //findQueueFamilies(view.getPhysicalDevice());
+	
 	VkCommandPoolCreateInfo poolInfo = {}; 
 	poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily;
+	poolInfo.queueFamilyIndex = TayTayQueueFamilies.graphicsFamily;
 	poolInfo.flags = 0; // Optional
 
 	if (vkCreateCommandPool(view.getDevice(), &poolInfo, nullptr, &commandPool) != VK_SUCCESS) 

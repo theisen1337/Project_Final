@@ -34,6 +34,17 @@ public:
 	VkSemaphore getImageAvailableSemaphore();
 	VkSemaphore getRenderFinishedSemaphore();
 
+	struct QueueFamilyIndices
+	{
+		int graphicsFamily = -1;
+		int presentFamily = -1;
+
+		bool isComplete()
+		{
+			return graphicsFamily >= 0 && presentFamily >= 0;
+		}
+	};
+
 	// READ DATA //
 	static std::vector<char> readFile(const std::string& filename);
 

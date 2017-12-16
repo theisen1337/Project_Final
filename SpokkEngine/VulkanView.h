@@ -37,6 +37,19 @@ public:
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME
 	};
 
+
+	// STRUCTS
+	struct QueueFamilyIndices
+	{
+		int graphicsFamily = -1;
+		int presentFamily = -1;
+
+		bool isComplete()
+		{
+			return graphicsFamily >= 0 && presentFamily >= 0;
+		}
+	};
+
 	// CONSTRUCTOR //
 	VulkanView();
 	~VulkanView();
@@ -79,6 +92,8 @@ public:
 	void createSwapChain();
 	void createImageViews();
 
+	
+
 	// SWAPCHAIN //
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
@@ -88,6 +103,8 @@ public:
 	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 	bool isDeviceSuitable(VkPhysicalDevice device);
 
-	QueueFamilyIndices VulkanView::findQueueFamilies(VkPhysicalDevice device);
+	QueueFamilyIndices FUCK_findQueueFamilies(VkPhysicalDevice device);
+
+	QueueFamilyIndices getTayTayQueueFamilyIndices();
 };
 #endif
