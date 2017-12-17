@@ -57,9 +57,15 @@ void SpokkEngine::initVulkan()
 	view.createSwapChain();
 	view.createImageViews();
 	render.createRenderPass();
+	render.createDescriptorSetLayout();
 	render.createGraphicsPipeline();
 	render.createFramebuffers();
 	render.createCommandPool();
+	render.createVertexBuffer();
+	render.createIndexBuffer();
+	render.createUniformBuffer();
+	render.createDescriptorPool();
+	render.createDescriptorSet();
 	render.createCommandBuffers();
 	render.createSemaphores();
 }
@@ -69,39 +75,39 @@ void SpokkEngine::mainLoop()
 	while (!glfwWindowShouldClose(view.getWindow()))
 	{
 		glfwPollEvents();
+
+		render.updateUniformBuffer();
 		render.drawFrame();
 	}
+
+	vkDeviceWaitIdle(view.getDevice());
 }
 
 void SpokkEngine::cleanup()
 {
+	view.cleanupSwapChain();
+
+	vkDestroyDescriptorPool(view.getDevice(), render.getDescriptorPool(), nullptr);
+
+	vkDestroyDescriptorSetLayout(view.getDevice(), render.getDescriptorSetLayout(), nullptr);
+
+	vkDestroyBuffer(view.getDevice(), render.getUniformBuffer(), nullptr);
+	vkFreeMemory(view.getDevice(), render.getUniformBuffer(), nullptr);
+
+	vkDestroyBuffer(view.getDevice(), render.getIndexBuffer(), nullptr);
+	vkFreeMemory(view.getDevice(), render.getIndexBufferMemory(), nullptr);
+
+	vkDestroyBuffer(view.getDevice(), render.getVertexBuffer(), nullptr);
+	vkFreeMemory(view.getDevice(), render.getVertexBufferMemory(), nullptr);
+
 	vkDestroySemaphore(view.getDevice(), render.getRenderFinishedSemaphore(), nullptr);
 	vkDestroySemaphore(view.getDevice(), render.getImageAvailableSemaphore(), nullptr);
 
 	vkDestroyCommandPool(view.getDevice(), render.getCommandPool(), nullptr);
 
-	for (auto framebuffer : view.getSwapChainFramebuffers()) 
-	{
-		vkDestroyFramebuffer(view.getDevice(), framebuffer, nullptr);
-	}
-
-	vkDestroyPipeline(view.getDevice(), render.getGraphicsPipeline(), nullptr);
-	vkDestroyPipelineLayout(view.getDevice(), render.getPipelineLayout(), nullptr);
-	vkDestroyRenderPass(view.getDevice(), render.getRenderPass(), nullptr);
-
-	for (auto imageView : view.getSwapChainImageViews())
-	{
-		vkDestroyImageView(view.getDevice(), imageView, nullptr);
-	}
-
-	vkDestroySwapchainKHR(view.getDevice(), view.getSwapChain(), nullptr);
-
 	vkDestroyDevice(view.getDevice(), nullptr);
-
 	view.DestroyDebugReportCallbackEXT(view.getInstance(), view.getCallback(), nullptr);
-
 	vkDestroySurfaceKHR(view.getInstance(), view.getSurface(), nullptr);
-
 	vkDestroyInstance(view.getInstance(), nullptr);
 
 	glfwDestroyWindow(view.getWindow());

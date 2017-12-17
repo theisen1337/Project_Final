@@ -1,8 +1,6 @@
 #include "VulkanView.h"
 #include "SpokkEngine.h"
 
-#include "Initialization.h"
-
 // STATIC VARIABLES
 static GLFWwindow* window;
 static VkInstance instance;
@@ -53,13 +51,13 @@ VkSwapchainKHR VulkanView::getSwapChain()
 {
 	return swapChain;
 }
-std::vector<VkImageView> VulkanView::getSwapChainImageViews()
+std::vector<VkImageView> * VulkanView::getSwapChainImageViews()
 {
-	return swapChainImageViews;
+	return &swapChainImageViews;
 }
-VkImageView VulkanView::getSwapChainImageViewsIndex(int index)
+VkImageView * VulkanView::getSwapChainImageViewsIndex(int index)
 {
-	return swapChainImageViews[index];
+	return &swapChainImageViews[index];
 }
 VkExtent2D VulkanView::getSwapChainExtent()
 {
@@ -69,13 +67,13 @@ VkFormat VulkanView::getSwapChainImageFormat()
 {
 	return swapChainImageFormat;
 }
-std::vector<VkFramebuffer> VulkanView::getSwapChainFramebuffers()
+std::vector<VkFramebuffer> * VulkanView::getSwapChainFramebuffers()
 {
-	return swapChainFramebuffers;
+	return &swapChainFramebuffers;
 }
-VkFramebuffer VulkanView::getSwapChainFramebuffersIndex(int index)
+VkFramebuffer * VulkanView::getSwapChainFramebuffersIndex(int index)
 {
-	return swapChainFramebuffers[index];
+	return &swapChainFramebuffers[index];
 }
 VkQueue VulkanView::getGraphicsQueue()
 {
@@ -90,9 +88,23 @@ VkPhysicalDevice VulkanView::getPhysicalDevice()
 	return physicalDevice;
 }
 
-QueueFamilyIndices VulkanView::findQueueFamilies(VkPhysicalDevice device)
+struct SwapChainSupportDetails
 {
-	QueueFamilyIndices indices;
+	VkSurfaceCapabilitiesKHR capabilities;
+	std::vector<VkSurfaceFormatKHR> formats;
+	std::vector<VkPresentModeKHR> presentModes;
+};
+
+VulkanView::QueueFamilyIndices VulkanView::getQueueFamilyIndices()
+{
+	VulkanView::QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+	return indices;
+}
+
+// QUEUES
+VulkanView::QueueFamilyIndices VulkanView::findQueueFamilies(VkPhysicalDevice device)
+{
+	VulkanView::QueueFamilyIndices indices;
 
 	uint32_t queueFamilyCount = 0;
 	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
@@ -236,7 +248,10 @@ VkExtent2D VulkanView::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabili
 	}
 	else
 	{
-		VkExtent2D actualExtent = { WIDTH, HEIGHT };
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
+
+		VkExtent2D actualExtent = { width, height };
 
 		actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
 		actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));
@@ -341,10 +356,13 @@ void VulkanView::initWindow()
 	// This Tells the Window to Not Create an OpenGL Context
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	// Temporarily Disables Resizing of the Window
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	//glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 	// Initializes the Actual Window
 	window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+
+	glfwSetWindowUserPointer(window, this);
+	glfwSetWindowSizeCallback(window, VulkanView::onWindowResized);
 }
 
 // CREATE INSTANCE
@@ -420,7 +438,7 @@ void VulkanView::pickPhysicalDevice()
 // CREATE LOGICAL DEVICE
 void VulkanView::createLogicalDevice()
 {
-	QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+	VulkanView::QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
 
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 	std::set<int> uniqueQueueFamilies = { indices.graphicsFamily, indices.presentFamily };
@@ -502,7 +520,7 @@ void VulkanView::createSwapChain()
 	createInfo.imageArrayLayers = 1;
 	createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-	QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+	VulkanView::QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
 	uint32_t queueFamilyIndices[] = { (uint32_t)indices.graphicsFamily, (uint32_t)indices.presentFamily };
 
 	if (indices.graphicsFamily != indices.presentFamily) {
@@ -561,4 +579,48 @@ void VulkanView::createImageViews()
 			throw std::runtime_error("failed to create image views!");
 		}
 	}
+}
+
+void VulkanView::cleanupSwapChain()
+{
+	for (size_t i = 0; i < swapChainFramebuffers.size(); i++) {
+		vkDestroyFramebuffer(device, swapChainFramebuffers[i], nullptr);
+	}
+
+	vkFreeCommandBuffers(device, render.getCommandPool(), static_cast<uint32_t>(render.getCommandBuffers().size()), render.getCommandBuffers().data());
+
+	vkDestroyPipeline(device, render.getGraphicsPipeline(), nullptr);
+	vkDestroyPipelineLayout(device, render.getPipelineLayout(), nullptr);
+	vkDestroyRenderPass(device, render.getRenderPass(), nullptr);
+
+	for (size_t i = 0; i < swapChainImageViews.size(); i++) {
+		vkDestroyImageView(device, swapChainImageViews[i], nullptr);
+	}
+
+	vkDestroySwapchainKHR(device, swapChain, nullptr);
+}
+
+void VulkanView::recreateSwapChain() {
+	vkDeviceWaitIdle(device);
+
+	cleanupSwapChain();
+
+	createSwapChain();
+	createImageViews();
+	render.createRenderPass();
+	render.createGraphicsPipeline();
+	render.createFramebuffers();
+	render.createCommandBuffers();
+}
+
+void VulkanView::onWindowResized(GLFWwindow* window, int width, int height)
+{
+	if(width == 0 || height == 0)
+	{
+		return;
+	}
+
+	// GLFW returns pointer to object set as window user, so store it locally and use it to recreate the swap chain
+	VulkanView* vkView = reinterpret_cast<VulkanView*>(glfwGetWindowUserPointer(window));
+	vkView->recreateSwapChain();
 }

@@ -12,24 +12,6 @@
 #include <cstring>
 #include <set>
 
-struct QueueFamilyIndices
-{
-	int graphicsFamily = -1;
-	int presentFamily = -1;
-
-	bool isComplete()
-	{
-		return graphicsFamily >= 0 && presentFamily >= 0;
-	}
-};
-
-struct SwapChainSupportDetails
-{
-	VkSurfaceCapabilitiesKHR capabilities;
-	std::vector<VkSurfaceFormatKHR> formats;
-	std::vector<VkPresentModeKHR> presentModes;
-};
-
 using namespace std;
 
 #ifdef NDEBUG
@@ -55,6 +37,19 @@ public:
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME
 	};
 
+
+	// STRUCTS
+	struct QueueFamilyIndices
+	{
+		int graphicsFamily = -1;
+		int presentFamily = -1;
+
+		bool isComplete()
+		{
+			return graphicsFamily >= 0 && presentFamily >= 0;
+		}
+	};
+
 	// CONSTRUCTOR //
 	VulkanView();
 	~VulkanView();
@@ -66,17 +61,15 @@ public:
 	VkDevice getDevice();
 	VkSurfaceKHR getSurface();
 	VkSwapchainKHR getSwapChain();
-	std::vector<VkImageView> getSwapChainImageViews();
-	static VkImageView getSwapChainImageViewsIndex(int index);
+	std::vector<VkImageView> * getSwapChainImageViews();
+	VkImageView * getSwapChainImageViewsIndex(int index);
 	VkExtent2D getSwapChainExtent();
 	VkFormat getSwapChainImageFormat();
-	std::vector<VkFramebuffer> getSwapChainFramebuffers();
-	static VkFramebuffer getSwapChainFramebuffersIndex(int index);
+	std::vector<VkFramebuffer> * getSwapChainFramebuffers();
+	VkFramebuffer * getSwapChainFramebuffersIndex(int index);
 	VkQueue getGraphicsQueue();
 	VkQueue getPresentQueue();
 	VkPhysicalDevice getPhysicalDevice();
-
-	static QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 	
 	// DEBUGGING //
 	VkResult CreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback);
@@ -98,6 +91,11 @@ public:
 	void createSurface();
 	void createSwapChain();
 	void createImageViews();
+	void cleanupSwapChain();
+	void recreateSwapChain();
+
+	static void onWindowResized(GLFWwindow* window, int width, int height);
+	
 
 	// SWAPCHAIN //
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
@@ -107,5 +105,9 @@ public:
 	// CHECK DEVICE //
 	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 	bool isDeviceSuitable(VkPhysicalDevice device);
+
+	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+
+	QueueFamilyIndices getQueueFamilyIndices();
 };
 #endif
