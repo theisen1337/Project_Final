@@ -61,6 +61,9 @@ void SpokkEngine::initVulkan()
 	render.createGraphicsPipeline();
 	render.createFramebuffers();
 	render.createCommandPool();
+	render.createTextureImage();
+	render.createTextureImageView();
+	render.createTextureSampler();
 	render.createVertexBuffer();
 	render.createIndexBuffer();
 	render.createUniformBuffer();
@@ -86,6 +89,12 @@ void SpokkEngine::mainLoop()
 void SpokkEngine::cleanup()
 {
 	view.cleanupSwapChain();
+
+	vkDestroySampler(view.getDevice(), render.getTextureSampler(), nullptr);
+	vkDestroyImageView(view.getDevice(), render.getTextureImageView(), nullptr);
+
+	vkDestroyImage(view.getDevice(), render.getTextureImage(), nullptr);
+	vkFreeMemory(view.getDevice(), render.getTextureImageMemory(), nullptr);
 
 	vkDestroyDescriptorPool(view.getDevice(), render.getDescriptorPool(), nullptr);
 
