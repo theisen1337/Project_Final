@@ -1,5 +1,10 @@
 #include "Sprite.h"
 
+Sprite::Sprite()
+{
+
+}
+
 //imagePath - location of image file
 Sprite::Sprite(const char* imagePath)
 {

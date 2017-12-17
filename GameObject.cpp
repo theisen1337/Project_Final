@@ -71,7 +71,19 @@ GameObject::GameObject(double r, Vector2 position, Vector2 velocity)
 	vel_old = vel;
 }
 
-
+GameObject::GameObject(SpriteSheet ss, double r, Vector2 position, Vector2 velocity)
+{
+	sprite = ss;
+	radius = r;
+	bound = r + 1;
+	pos = position;
+	vel = velocity;
+	m = 1;
+	force = Vector2(0, 0);
+	force_old = Vector2(0, 0);
+	pos_old = pos;
+	vel_old = vel;
+}
 
 //	#########	//
 //	Functions	//
@@ -80,6 +92,11 @@ GameObject::GameObject(double r, Vector2 position, Vector2 velocity)
 void GameObject::setMass(double mass)
 {
 	m = mass;
+}
+
+void GameObject::setSprite(SpriteSheet ss)
+{
+	sprite = ss;
 }
 
 //Converts contents of GameObject to a string

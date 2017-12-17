@@ -1,6 +1,7 @@
 #pragma once
+#include <vulkan\vulkan.h>
 #include <stdexcept>
-#define STB_IMAGE_IMPLEMENTATION
+//#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 
@@ -15,6 +16,7 @@ private:
 	VkDeviceSize imageSize; //memory size of the image
 
 public:
+	Sprite();
 	Sprite(const char* imagePath);
 	~Sprite();
 	int getWidth();
