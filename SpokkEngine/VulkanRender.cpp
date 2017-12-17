@@ -10,7 +10,7 @@ static VkPipelineLayout pipelineLayout;
 static VkRenderPass renderPass;
 static VkPipeline graphicsPipeline;
 static VkCommandPool commandPool;
-std::vector<VkCommandBuffer> commandBuffers;
+static std::vector<VkCommandBuffer> commandBuffers;
 
 static VkSemaphore imageAvailableSemaphore;
 static VkSemaphore renderFinishedSemaphore;
@@ -246,12 +246,11 @@ void VulkanRender::createRenderPass()
 // CREATE FRAME BUFFERS
 void VulkanRender::createFramebuffers()
 {
-	view.getSwapChainFramebuffers().resize(view.getSwapChainImageViews().size());
+	view.getSwapChainFramebuffers()->resize(view.getSwapChainImageViews()->size());
 
-	for (size_t i = 0; i < view.getSwapChainImageViews().size(); i++) {
-		VkImageView attachments[] = {
-			view.getSwapChainImageViewsIndex(i)
-		};
+	for (size_t i = 0; i < view.getSwapChainImageViews()->size(); i++) {
+
+		VkImageView attachments[] = {*view.getSwapChainImageViewsIndex(i)};
 
 		VkFramebufferCreateInfo framebufferInfo = {};
 		framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -262,9 +261,9 @@ void VulkanRender::createFramebuffers()
 		framebufferInfo.height = view.getSwapChainExtent().height;
 		framebufferInfo.layers = 1;
 
-		VkFramebuffer tempBuffer = view.getSwapChainFramebuffersIndex(i);
+		//VkFramebuffer tempBuffer = *view.getSwapChainFramebuffersIndex(i);
 
-		if (vkCreateFramebuffer(view.getDevice(), &framebufferInfo, nullptr, &tempBuffer) != VK_SUCCESS) 
+		if (vkCreateFramebuffer(view.getDevice(), &framebufferInfo, nullptr, view.getSwapChainFramebuffersIndex(i)) != VK_SUCCESS)
 		{
 			throw std::runtime_error("failed to create framebuffer!");
 		}
@@ -274,11 +273,11 @@ void VulkanRender::createFramebuffers()
 // CREATE COMMAND POOL
 void VulkanRender::createCommandPool()
 {
-	VulkanView::QueueFamilyIndices TayTayQueueFamilies = view.getTayTayQueueFamilyIndices(); //findQueueFamilies(view.getPhysicalDevice());
+	VulkanView::QueueFamilyIndices index = view.getQueueFamilyIndices(); //findQueueFamilies(view.getPhysicalDevice());
 	
 	VkCommandPoolCreateInfo poolInfo = {}; 
 	poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	poolInfo.queueFamilyIndex = TayTayQueueFamilies.graphicsFamily;
+	poolInfo.queueFamilyIndex = index.graphicsFamily;
 	poolInfo.flags = 0; // Optional
 
 	if (vkCreateCommandPool(view.getDevice(), &poolInfo, nullptr, &commandPool) != VK_SUCCESS) 
@@ -290,7 +289,7 @@ void VulkanRender::createCommandPool()
 // CREATE COMMAND BUFFERS
 void VulkanRender::createCommandBuffers()
 {
-	commandBuffers.resize(view.getSwapChainFramebuffers().size());
+	commandBuffers.resize(view.getSwapChainFramebuffers()->size());
 
 	VkCommandBufferAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -315,7 +314,7 @@ void VulkanRender::createCommandBuffers()
 		VkRenderPassBeginInfo renderPassInfo = {};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 		renderPassInfo.renderPass = renderPass;
-		renderPassInfo.framebuffer = view.getSwapChainFramebuffersIndex(i);
+		renderPassInfo.framebuffer = *view.getSwapChainFramebuffersIndex(i);
 		renderPassInfo.renderArea.offset = { 0, 0 };
 		renderPassInfo.renderArea.extent = view.getSwapChainExtent();
 

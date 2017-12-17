@@ -80,7 +80,7 @@ void SpokkEngine::cleanup()
 
 	vkDestroyCommandPool(view.getDevice(), render.getCommandPool(), nullptr);
 
-	for (auto framebuffer : view.getSwapChainFramebuffers()) 
+	for (auto framebuffer : *view.getSwapChainFramebuffers()) 
 	{
 		vkDestroyFramebuffer(view.getDevice(), framebuffer, nullptr);
 	}
@@ -89,7 +89,7 @@ void SpokkEngine::cleanup()
 	vkDestroyPipelineLayout(view.getDevice(), render.getPipelineLayout(), nullptr);
 	vkDestroyRenderPass(view.getDevice(), render.getRenderPass(), nullptr);
 
-	for (auto imageView : view.getSwapChainImageViews())
+	for (auto imageView : *view.getSwapChainImageViews())
 	{
 		vkDestroyImageView(view.getDevice(), imageView, nullptr);
 	}

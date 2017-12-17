@@ -61,12 +61,12 @@ public:
 	VkDevice getDevice();
 	VkSurfaceKHR getSurface();
 	VkSwapchainKHR getSwapChain();
-	std::vector<VkImageView> getSwapChainImageViews();
-	static VkImageView getSwapChainImageViewsIndex(int index);
+	std::vector<VkImageView> * getSwapChainImageViews();
+	VkImageView * getSwapChainImageViewsIndex(int index);
 	VkExtent2D getSwapChainExtent();
 	VkFormat getSwapChainImageFormat();
-	std::vector<VkFramebuffer> getSwapChainFramebuffers();
-	static VkFramebuffer getSwapChainFramebuffersIndex(int index);
+	std::vector<VkFramebuffer> * getSwapChainFramebuffers();
+	VkFramebuffer * getSwapChainFramebuffersIndex(int index);
 	VkQueue getGraphicsQueue();
 	VkQueue getPresentQueue();
 	VkPhysicalDevice getPhysicalDevice();
@@ -103,8 +103,8 @@ public:
 	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 	bool isDeviceSuitable(VkPhysicalDevice device);
 
-	QueueFamilyIndices FUCK_findQueueFamilies(VkPhysicalDevice device);
+	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
-	QueueFamilyIndices getTayTayQueueFamilyIndices();
+	QueueFamilyIndices getQueueFamilyIndices();
 };
 #endif

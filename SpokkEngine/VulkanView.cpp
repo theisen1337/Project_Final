@@ -51,13 +51,13 @@ VkSwapchainKHR VulkanView::getSwapChain()
 {
 	return swapChain;
 }
-std::vector<VkImageView> VulkanView::getSwapChainImageViews()
+std::vector<VkImageView> * VulkanView::getSwapChainImageViews()
 {
-	return swapChainImageViews;
+	return &swapChainImageViews;
 }
-VkImageView VulkanView::getSwapChainImageViewsIndex(int index)
+VkImageView * VulkanView::getSwapChainImageViewsIndex(int index)
 {
-	return swapChainImageViews[index];
+	return &swapChainImageViews[index];
 }
 VkExtent2D VulkanView::getSwapChainExtent()
 {
@@ -67,13 +67,13 @@ VkFormat VulkanView::getSwapChainImageFormat()
 {
 	return swapChainImageFormat;
 }
-std::vector<VkFramebuffer> VulkanView::getSwapChainFramebuffers()
+std::vector<VkFramebuffer> * VulkanView::getSwapChainFramebuffers()
 {
-	return swapChainFramebuffers;
+	return &swapChainFramebuffers;
 }
-VkFramebuffer VulkanView::getSwapChainFramebuffersIndex(int index)
+VkFramebuffer * VulkanView::getSwapChainFramebuffersIndex(int index)
 {
-	return swapChainFramebuffers[index];
+	return &swapChainFramebuffers[index];
 }
 VkQueue VulkanView::getGraphicsQueue()
 {
@@ -88,8 +88,6 @@ VkPhysicalDevice VulkanView::getPhysicalDevice()
 	return physicalDevice;
 }
 
-
-
 struct SwapChainSupportDetails
 {
 	VkSurfaceCapabilitiesKHR capabilities;
@@ -97,14 +95,14 @@ struct SwapChainSupportDetails
 	std::vector<VkPresentModeKHR> presentModes;
 };
 
-VulkanView::QueueFamilyIndices VulkanView::getTayTayQueueFamilyIndices()
+VulkanView::QueueFamilyIndices VulkanView::getQueueFamilyIndices()
 {
-	VulkanView::QueueFamilyIndices indices = FUCK_findQueueFamilies(physicalDevice);
+	VulkanView::QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
 	return indices;
 }
 
 // QUEUES
-VulkanView::QueueFamilyIndices VulkanView::FUCK_findQueueFamilies(VkPhysicalDevice device)
+VulkanView::QueueFamilyIndices VulkanView::findQueueFamilies(VkPhysicalDevice device)
 {
 	VulkanView::QueueFamilyIndices indices;
 
@@ -332,7 +330,7 @@ bool VulkanView::checkDeviceExtensionSupport(VkPhysicalDevice device)
 // CHECK DEVICE
 bool VulkanView::isDeviceSuitable(VkPhysicalDevice device) 
 {
-	QueueFamilyIndices indices = FUCK_findQueueFamilies(device);
+	QueueFamilyIndices indices = findQueueFamilies(device);
 
 	bool extensionsSupported = checkDeviceExtensionSupport(device);
 
@@ -344,10 +342,6 @@ bool VulkanView::isDeviceSuitable(VkPhysicalDevice device)
 
 	return indices.isComplete() && extensionsSupported && swapChainAdequate;
 }
-
-
-
-
 
 // INITIALIZE WINDOW
 void VulkanView::initWindow()
@@ -438,7 +432,7 @@ void VulkanView::pickPhysicalDevice()
 // CREATE LOGICAL DEVICE
 void VulkanView::createLogicalDevice()
 {
-	QueueFamilyIndices indices = FUCK_findQueueFamilies(physicalDevice);
+	VulkanView::QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
 
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 	std::set<int> uniqueQueueFamilies = { indices.graphicsFamily, indices.presentFamily };
@@ -520,7 +514,7 @@ void VulkanView::createSwapChain()
 	createInfo.imageArrayLayers = 1;
 	createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-	QueueFamilyIndices indices = FUCK_findQueueFamilies(physicalDevice);
+	VulkanView::QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
 	uint32_t queueFamilyIndices[] = { (uint32_t)indices.graphicsFamily, (uint32_t)indices.presentFamily };
 
 	if (indices.graphicsFamily != indices.presentFamily) {
