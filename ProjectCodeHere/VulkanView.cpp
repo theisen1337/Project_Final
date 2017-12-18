@@ -16,6 +16,8 @@ static VkQueue graphicsQueue;
 static VkQueue presentQueue;
 static VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
+static bool isPaused;
+
 static int const WIDTH = 800;
 static int const HEIGHT = 600;
 
@@ -613,4 +615,12 @@ void VulkanView::onWindowResized(GLFWwindow* window, int width, int height)
 	// GLFW returns pointer to object set as window user, so store it locally and use it to recreate the swap chain
 	VulkanView* vkView = reinterpret_cast<VulkanView*>(glfwGetWindowUserPointer(window));
 	vkView->recreateSwapChain();
+}
+
+static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	if (key == GLFW_KEY_P && action == GLFW_PRESS)
+	{
+		isPaused = !isPaused;
+		std::cout << "isPaused: " << isPaused << "\n";
+	}
 }

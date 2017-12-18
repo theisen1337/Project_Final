@@ -17,6 +17,12 @@ GameObject::GameObject()
 	force_old = Vector2(0, 0);
 	pos_old = Vector2(0, 0);
 	vel_old = Vector2(0, 0);
+	vertices = {
+		{ { pos.x-0.3f, pos.y-0.3f },{ 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
+		{ { pos.x+0.3f, pos.y-0.3f },{ 0.0f, 1.0f, 0.0f },{ 0.0f, 0.0f } },
+		{ { pos.x+0.3f, pos.y+0.3f },{ 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f } },
+		{ { pos.x-0.3f, pos.y+0.3f },{ 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } }
+	};
 }
 
 GameObject::GameObject(double r)
@@ -30,6 +36,12 @@ GameObject::GameObject(double r)
 	force_old = Vector2(0, 0);
 	pos_old = Vector2(0, 0);
 	vel_old = Vector2(0, 0);
+	vertices = {
+		{ { pos.x - 0.3f, pos.y - 0.3f },{ 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y - 0.3f },{ 0.0f, 1.0f, 0.0f },{ 0.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y + 0.3f },{ 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f } },
+		{ { pos.x - 0.3f, pos.y + 0.3f },{ 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } }
+	};
 }
 
 GameObject::GameObject(double r, double b)
@@ -43,6 +55,12 @@ GameObject::GameObject(double r, double b)
 	force_old = Vector2(0, 0);
 	pos_old = Vector2(0, 0);
 	vel_old = Vector2(0, 0);
+	vertices = {
+		{ { pos.x - 0.3f, pos.y - 0.3f },{ 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y - 0.3f },{ 0.0f, 1.0f, 0.0f },{ 0.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y + 0.3f },{ 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f } },
+		{ { pos.x - 0.3f, pos.y + 0.3f },{ 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } }
+	};
 }
 
 GameObject::GameObject(double r, double b, Vector2 position, Vector2 velocity)
@@ -56,6 +74,12 @@ GameObject::GameObject(double r, double b, Vector2 position, Vector2 velocity)
 	force_old = Vector2(0, 0);
 	pos_old = pos;
 	vel_old = vel;
+	vertices = {
+		{ { pos.x - 0.3f, pos.y - 0.3f },{ 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y - 0.3f },{ 0.0f, 1.0f, 0.0f },{ 0.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y + 0.3f },{ 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f } },
+		{ { pos.x - 0.3f, pos.y + 0.3f },{ 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } }
+	};
 }
 
 GameObject::GameObject(double r, Vector2 position, Vector2 velocity)
@@ -69,6 +93,12 @@ GameObject::GameObject(double r, Vector2 position, Vector2 velocity)
 	force_old = Vector2(0, 0);
 	pos_old = pos;
 	vel_old = vel;
+	vertices = {
+		{ { pos.x - 0.3f, pos.y - 0.3f },{ 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y - 0.3f },{ 0.0f, 1.0f, 0.0f },{ 0.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y + 0.3f },{ 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f } },
+		{ { pos.x - 0.3f, pos.y + 0.3f },{ 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } }
+	};
 }
 
 GameObject::GameObject(SpriteSheet ss, double r, Vector2 position, Vector2 velocity)
@@ -83,11 +113,31 @@ GameObject::GameObject(SpriteSheet ss, double r, Vector2 position, Vector2 veloc
 	force_old = Vector2(0, 0);
 	pos_old = pos;
 	vel_old = vel;
+	vertices = {
+		{ { pos.x - 0.3f, pos.y - 0.3f },{ 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y - 0.3f },{ 0.0f, 1.0f, 0.0f },{ 0.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y + 0.3f },{ 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f } },
+		{ { pos.x - 0.3f, pos.y + 0.3f },{ 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } }
+	};
 }
 
 //	#########	//
 //	Functions	//
 //	#########	//
+void GameObject::setVertices()
+{
+	vertices = {
+		{ { pos.x - 0.3f, pos.y - 0.3f },{ 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y - 0.3f },{ 0.0f, 1.0f, 0.0f },{ 0.0f, 0.0f } },
+		{ { pos.x + 0.3f, pos.y + 0.3f },{ 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f } },
+		{ { pos.x - 0.3f, pos.y + 0.3f },{ 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } }
+	};
+}
+
+std::vector<GameObject::Vertex> GameObject::getVertices()
+{
+	return vertices;
+}
 
 void GameObject::setMass(double mass)
 {
