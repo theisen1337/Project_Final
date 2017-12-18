@@ -59,8 +59,9 @@ void SpokkEngine::initVulkan()
 	render.createRenderPass();
 	render.createDescriptorSetLayout();
 	render.createGraphicsPipeline();
-	render.createFramebuffers();
 	render.createCommandPool();
+	render.createDepthResources();
+	render.createFramebuffers();
 	render.createTextureImage();
 	render.createTextureImageView();
 	render.createTextureSampler();

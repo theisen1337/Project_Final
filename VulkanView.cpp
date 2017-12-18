@@ -562,12 +562,16 @@ void VulkanView::createImageViews()
 	swapChainImageViews.resize(swapChainImages.size());
 
 	for (uint32_t i = 0; i < swapChainImages.size(); i++) {
-		swapChainImageViews[i] = render.createImageView(swapChainImages[i], swapChainImageFormat);
+		swapChainImageViews[i] = render.createImageView(swapChainImages[i], swapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT);
 	}
 }
 
 void VulkanView::cleanupSwapChain()
 {
+	vkDestroyImageView(device, render.getDepthImageView(), nullptr);
+	vkDestroyImage(device, render.getDepthImage(), nullptr);
+	vkFreeMemory(device, render.getDepthImageMemory(), nullptr);
+
 	for (size_t i = 0; i < swapChainFramebuffers.size(); i++) {
 		vkDestroyFramebuffer(device, swapChainFramebuffers[i], nullptr);
 	}
@@ -594,6 +598,7 @@ void VulkanView::recreateSwapChain() {
 	createImageViews();
 	render.createRenderPass();
 	render.createGraphicsPipeline();
+	render.createDepthResources();
 	render.createFramebuffers();
 	render.createCommandBuffers();
 }
