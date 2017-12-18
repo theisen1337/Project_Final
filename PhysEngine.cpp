@@ -116,6 +116,14 @@ void PhysEngine::verlet(int i)
 	netForce(i);
 }
 
+void PhysEngine::updateVertices()
+{
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		gameObjects[i].setVertices();
+	}
+}
+
 void PhysEngine::update()
 {
 	for (int i = 0; i < gameObjects.size(); i++)
@@ -125,6 +133,7 @@ void PhysEngine::update()
 		boundary(i);
 	}
 	broadphase();
+	updateVertices();
 }
 
 

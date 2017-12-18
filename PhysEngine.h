@@ -30,6 +30,7 @@ class PhysEngine
 		void forceGravity(int i);
 		void beuler(int i);
 		void verlet(int i);
+		void updateVertices();
 		void update();
 
 		// Collision Engine Functions

@@ -1,12 +1,13 @@
 #pragma once
 #include <vulkan\vulkan.h>
 #include <stdexcept>
+#include <vector>
 //#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-
 class Sprite
 {
+
 private:
 	const char* path;
 	int width;				//width of sprite in pixels

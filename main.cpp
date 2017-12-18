@@ -19,7 +19,7 @@ int main()
 	cout << "\n" << part1.toString();
 
 	PhysEngine eng = PhysEngine();
-	//eng.setGravity(Vector2(0, -1));
+	eng.setGravity(Vector2(0, -1));
 	eng.addGameObject(part1);
 	eng.addGameObject(part2);
 
