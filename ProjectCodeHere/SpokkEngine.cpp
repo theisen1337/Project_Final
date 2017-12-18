@@ -81,7 +81,7 @@ void SpokkEngine::mainLoop()
 	while (!glfwWindowShouldClose(view.getWindow()))
 	{
 		Compute.Instruction();
-		glfwSetKeyCallback(view.getWindow(), view.getCallback);
+		glfwSetKeyCallback(view.getWindow(), view.keyCallback);
 		/*glfwPollEvents();
 
 		render.updateUniformBuffer();

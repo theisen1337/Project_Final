@@ -149,8 +149,8 @@ VkShaderModule VulkanRender::createShaderModule(const std::vector<char>& code)
 // CREATE GRAPHICS
 void VulkanRender::createGraphicsPipeline()
 {
-	auto vertShaderCode = readFile("../shaders/vert.spv");
-	auto fragShaderCode = readFile("../shaders/frag.spv");
+	auto vertShaderCode = readFile("./shaders/vert.spv");
+	auto fragShaderCode = readFile("./shaders/frag.spv");
 
 	VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
 	VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -747,7 +747,7 @@ void VulkanRender::createDescriptorSet() {
 void VulkanRender::createTextureImage()
 {
 	int texWidth, texHeight, texChannels;
-	stbi_uc* pixels = stbi_load("../textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+	stbi_uc* pixels = stbi_load("./textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 	VkDeviceSize imageSize = texWidth * texHeight * 4;
 
 	if (!pixels) {

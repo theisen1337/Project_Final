@@ -1,6 +1,8 @@
 #include "VulkanView.h"
 #include "SpokkEngine.h"
 
+#include "Initialization.h"
+
 // STATIC VARIABLES
 static GLFWwindow* window;
 static VkInstance instance;
@@ -16,7 +18,7 @@ static VkQueue graphicsQueue;
 static VkQueue presentQueue;
 static VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
-static bool isPaused;
+
 
 static int const WIDTH = 800;
 static int const HEIGHT = 600;
@@ -617,10 +619,10 @@ void VulkanView::onWindowResized(GLFWwindow* window, int width, int height)
 	vkView->recreateSwapChain();
 }
 
-static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void VulkanView::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
 	{
-		isPaused = !isPaused;
-		std::cout << "isPaused: " << isPaused << "\n";
+		Initialization::setBool(!*Initialization::getBool());
+		std::cout << "isPaused: " << *Initialization::getBool() << "\n";
 	}
 }

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Computation.h"
-#include "VulkanRender.h"
-#include "VulkanView.h"
+//#include "Computation.h"
+//#include "VulkanRender.h"
+//#include "VulkanView.h"
 
 //struct QueueFamilyIndices
 //{
@@ -27,7 +27,11 @@ class Initialization
 public:
 	Initialization() {};
 	~Initialization() {};
-	static Computation* getComputation();
-	static VulkanRender* getRender();
-	static VulkanView* getView();
+
+	static bool * getBool();
+	static void setBool(bool in);
+
+	//static Computation* getComputation();
+	//static VulkanRender* getRender();
+	//static VulkanView* getView();
 };

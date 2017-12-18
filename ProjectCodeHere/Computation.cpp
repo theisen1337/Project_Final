@@ -2,7 +2,7 @@
 #include <chrono>
 #include "SpokkEngine.h"
 
-
+#include "Initialization.h"
 
 static auto startTime = std::chrono::high_resolution_clock::now();
 static float RunTime;
@@ -20,9 +20,12 @@ Computation::Computation()
 
 void Computation::Instruction()
 {
+	
 	UpdateStatistics(); // update private statistics of the Computation. i.e. ticksPerSecond.
 
-	renderc.updateUniformBuffer();
+	if (*Initialization::getBool())
+		renderc.updateUniformBuffer();
+
 	renderc.drawFrame();
 
 	glfwPollEvents();

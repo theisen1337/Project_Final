@@ -96,7 +96,7 @@ public:
 
 	static void onWindowResized(GLFWwindow* window, int width, int height);
 	
-
+	static void VulkanView::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	// SWAPCHAIN //
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
