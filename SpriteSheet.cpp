@@ -1,6 +1,6 @@
 #include "SpriteSheet.h"
 
-SpriteSheet::SpriteSheet() : Sprite()
+SpriteSheet::SpriteSheet() : Sprite::Sprite()
 {
 
 }
