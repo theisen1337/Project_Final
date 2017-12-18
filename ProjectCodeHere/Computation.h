@@ -10,7 +10,7 @@ class Computation
 public:
 	Computation();
 	void Instruction();
-	float getRunTime();
+	static float getRunTime();
 	float getTicksPerSecond();
 
 private:
@@ -19,7 +19,7 @@ private:
 	void setRunTime();
 	void setTicksPerSecond();
 
-	float RunTime;
+	//float RunTime;
 	float ticksPerSecond;
 	int ticksThisSecond;
 

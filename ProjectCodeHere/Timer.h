@@ -7,8 +7,6 @@ public:
 
 	~Timer();
 
-	void setTimer(float time);
-	void setTimer(int time);
 
 	bool RanOut();
 	float TimeLeft();

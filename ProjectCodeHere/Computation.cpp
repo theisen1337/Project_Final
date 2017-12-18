@@ -1,9 +1,13 @@
 #include "Computation.h"
 #include <chrono>
+#include "SpokkEngine.h"
 
 
 
 static auto startTime = std::chrono::high_resolution_clock::now();
+static float RunTime;
+
+VulkanRender renderc = *(SpokkEngine::getRender());
 
 ///Computation
 Computation::Computation()
@@ -18,8 +22,18 @@ void Computation::Instruction()
 {
 	UpdateStatistics(); // update private statistics of the Computation. i.e. ticksPerSecond.
 
+	renderc.updateUniformBuffer();
+	renderc.drawFrame();
+
+	glfwPollEvents();
+	//******************************************************************************
+
+
 	//SpriteContainer.Compute() // witch will hold the compute() all sprites
 	//Renderer.draw()
+
+
+	//******************************************************************************
 }
 
 void Computation::UpdateStatistics()
@@ -52,13 +66,13 @@ void Computation::setTicksPerSecond()
 void Computation::setRunTime()
 {
 	auto currentTime = std::chrono::high_resolution_clock::now();
-	Computation::RunTime = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+	RunTime = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 }
 
 
 //Return RunTime
 float Computation::getRunTime()
 {
-	return Computation::RunTime;
+	return RunTime;
 }
 
