@@ -1,4 +1,5 @@
 #include "Initialization.h"
+#include <ctype.h>
 
 using namespace std;
 
@@ -6,16 +7,43 @@ using namespace std;
 //static VulkanRender render;
 //static VulkanView view;
 
-static bool isPaused;
+static bool Key_P = false;
+static bool Key_R = false;
+static bool Key_UP_Arrow = false;
+static bool Key_Down_Arrow = false;
+static bool Key_Left_Arrow = false;
+static bool Key_Right_Arrow = false;
 
-bool * Initialization::getBool()
+bool * Initialization::getBool(char C)
 {
-	return &isPaused;
+	bool catchKey = false;
+	C = toupper(C);
+	switch (C)
+	{
+	case'P': return &Key_P;
+	case'R': return &Key_R;
+	case'^': return &Key_UP_Arrow;
+	case'.': return &Key_Down_Arrow;
+	case'<': return &Key_Left_Arrow;
+	case'>': return &Key_Right_Arrow;
+	}
+	return &catchKey;
+	
 }
 
-void Initialization::setBool(bool in)
+void Initialization::setBool(bool in,char C)
 {
-	isPaused = in;
+	C = toupper(C);
+	switch (C)
+	{
+	case'P': Key_P = in; break;
+	case'R': Key_R = in; break;
+	case'^': Key_UP_Arrow = in; break;
+	case'.': Key_Down_Arrow = in; break;
+	case'<': Key_Left_Arrow = in; break;
+	case'>': Key_Right_Arrow = in; break;
+	}
+
 }
 
 //Computation* Initialization::getComputation()

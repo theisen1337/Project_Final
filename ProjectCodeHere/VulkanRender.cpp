@@ -2,6 +2,10 @@
 #include "VulkanView.h"
 #include "SpokkEngine.h"
 
+#include <math.h>
+
+#include "Computation.h"
+#include "Initialization.h"
 //#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
@@ -23,7 +27,7 @@ static VkBuffer uniformBuffer;
 static VkDeviceMemory uniformBufferMemory;
 static VkDescriptorPool descriptorPool;
 static VkDescriptorSet descriptorSet;
-static VkImage textureImage;
+static VkImage textureImage; // note
 static VkDeviceMemory textureImageMemory;
 static VkImageView textureImageView;
 static VkSampler textureSampler;
@@ -504,7 +508,7 @@ void VulkanRender::drawFrame()
 	presentInfo.pWaitSemaphores = signalSemaphores;
 
 	VkSwapchainKHR swapChains[] = { view.getSwapChain() };
-	presentInfo.swapchainCount = 1;
+	presentInfo.swapchainCount = 1; //!note
 	presentInfo.pSwapchains = swapChains;
 	presentInfo.pImageIndices = &imageIndex;
 	presentInfo.pResults = nullptr; // Optional
@@ -665,15 +669,48 @@ void VulkanRender::createUniformBuffer()
 void VulkanRender::updateUniformBuffer()
 {
 	// TODO: Replace these with Timer class??
-	static auto startTime = std::chrono::high_resolution_clock::now();
 
-	auto currentTime = std::chrono::high_resolution_clock::now();
-	float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+	//if ((*Initialization::getBool('R')))
+
+	//{
+	//	tempTime = Computation::getGameTime();
+	//	Angle = tempTime;
+	//}
+	//else
+	//{
+	//	Angle = tempTime - ( Computation::getGameTime() - tempTime);
+	//}
+	static float Angle = 30.0f;
+
+	if ((*Initialization::getBool('>')))
+		Angle += 0.10f;
+	if ((*Initialization::getBool('<')))
+		Angle -= 0.10f;
+
+	
+	float time = fmod(Computation::getGameTime(),(360.0f/Angle));
+	float placement = (time * glm::radians(Angle));
+	static float zoom = 45.0f;
+	if ((*Initialization::getBool('^')))
+		zoom -= 0.1f;
+	if ((*Initialization::getBool('.')))
+		zoom += 0.1f;
+
+	
+
+	if (Angle < 0)
+	{
+		//placement = placement *-1;
+	}
+	else
+	{
+
+	}
 
 	UniformBufferObject ubo = {};
-	ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	ubo.model = glm::rotate(glm::mat4(1.0f), placement * ((*Initialization::getBool('R')) ? -1: 1), glm::vec3(0.0f, 0.0f, 1.0f));
 	ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	ubo.proj = glm::perspective(glm::radians(45.0f), view.getSwapChainExtent().width / (float) view.getSwapChainExtent().height, 0.1f, 10.0f);
+	ubo.proj = glm::perspective(glm::radians(zoom), view.getSwapChainExtent().width / (float) view.getSwapChainExtent().height, 0.1f, 10.0f);
 
 	ubo.proj[1][1] *= -1;
 
@@ -681,6 +718,7 @@ void VulkanRender::updateUniformBuffer()
 	vkMapMemory(view.getDevice(), uniformBufferMemory, 0, sizeof(ubo), 0, &data);
 	memcpy(data, &ubo, sizeof(ubo));
 	vkUnmapMemory(view.getDevice(), uniformBufferMemory);
+	
 }
 
 void VulkanRender::createDescriptorPool() {
@@ -747,8 +785,10 @@ void VulkanRender::createDescriptorSet() {
 void VulkanRender::createTextureImage()
 {
 	int texWidth, texHeight, texChannels;
+
 	stbi_uc* pixels = stbi_load("./textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
-	VkDeviceSize imageSize = texWidth * texHeight * 4;
+
+	VkDeviceSize imageSize = ((texWidth) * (texHeight) * 4);
 
 	if (!pixels) {
 		throw std::runtime_error("failed to load texture image!");
@@ -756,6 +796,8 @@ void VulkanRender::createTextureImage()
 
 	VkBuffer stagingBuffer;
 	VkDeviceMemory stagingBufferMemory;
+
+
 	createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
 	void* data;
@@ -767,12 +809,12 @@ void VulkanRender::createTextureImage()
 
 	createImage(texWidth, texHeight, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, textureImage, textureImageMemory);
 
-	transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 	copyBufferToImage(stagingBuffer, textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
 	transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 	vkDestroyBuffer(view.getDevice(), stagingBuffer, nullptr);
 	vkFreeMemory(view.getDevice(), stagingBufferMemory, nullptr);
+
 }
 
 void VulkanRender::createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) {

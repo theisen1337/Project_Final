@@ -28,8 +28,8 @@ public:
 	Initialization() {};
 	~Initialization() {};
 
-	static bool * getBool();
-	static void setBool(bool in);
+	static bool * getBool(char C);
+	static void setBool(bool in, char C);
 
 	//static Computation* getComputation();
 	//static VulkanRender* getRender();

@@ -533,7 +533,7 @@ void VulkanView::createSwapChain()
 
 	if (indices.graphicsFamily != indices.presentFamily) {
 		createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-		createInfo.queueFamilyIndexCount = 2;
+		createInfo.queueFamilyIndexCount = 1; //!note
 		createInfo.pQueueFamilyIndices = queueFamilyIndices;
 	}
 	else {
@@ -622,7 +622,53 @@ void VulkanView::onWindowResized(GLFWwindow* window, int width, int height)
 void VulkanView::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
 	{
-		Initialization::setBool(!*Initialization::getBool());
-		std::cout << "isPaused: " << *Initialization::getBool() << "\n";
+		Initialization::setBool(!*Initialization::getBool('P'),'P');
+		std::cout << "Paused: " << *Initialization::getBool('p') << "\n";
 	}
+	if (key == GLFW_KEY_R && action == GLFW_PRESS)
+	{
+		Initialization::setBool(!*Initialization::getBool('R'), 'R');
+		std::cout << "Rotation Switched: " << *Initialization::getBool('R') << "\n";
+	}
+
+	if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+	{
+		Initialization::setBool(true, '^');
+		std::cout << "Zoom in"<< "\n";
+	}
+	else if(key == GLFW_KEY_UP && action == GLFW_RELEASE)
+	{
+		Initialization::setBool(false, '^');
+	}
+
+	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+	{
+		Initialization::setBool(true, '.');
+		std::cout << "Zoom out" << "\n";
+	}
+	else if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE)
+	{
+		Initialization::setBool(false, '.');
+	}
+
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+	{
+		Initialization::setBool(true, '<');
+		std::cout << "left arrow " << "\n";
+	}
+	else if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE)
+	{
+		Initialization::setBool(false, '<');
+	}
+
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+	{
+		Initialization::setBool(true, '>');
+		std::cout << "right arrow" << "\n";
+	}
+	else if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
+	{
+		Initialization::setBool(false, '>');
+	}
+
 }
